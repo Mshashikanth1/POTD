@@ -1,0 +1,119 @@
+
+//User function Template for Java
+
+/* Node class of the binary tree
+class Node
+{
+    int data;
+    Node left, right;
+    Node(int key)
+    {
+        data = key;
+        left = right = null;
+    }
+}
+Leftmost and rightmost nodes of binary tree
+MediumAccuracy: 52.58%Submissions: 45K+Points: 4
+
+Given a Binary Tree of size N, Print the corner nodes ie- the node at the leftmost and rightmost of each level.
+
+Example 1:
+
+Input :
+         1
+       /  \
+     2      3
+    / \    / \
+   4   5  6   7    
+Output: 1 2 3 4 7
+Explanation:
+Corners at level 0: 1
+Corners at level 1: 2 3
+Corners at level 2: 4 7
+
+Example 2:
+
+Input:
+
+        10
+      /    \
+     20     30
+    / \  
+   40  60
+Output: 10 20 30 40 60
+
+Your Task:  
+You dont need to read input. Complete the function printCorner() which takes root node as input parameter and prints the corner nodes separated by spaces. The left corner should be printed before the right for each level starting from level 0.
+Note: Don't print a new line after printing all the corner nodes.
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(number of nodes in a level)
+
+Constraints:
+1 ≤ N ≤ 10^5
+
+*/
+class Tree
+{
+    Map<Integer,List<Integer>> mySortedMap=new LinkedHashMap<>();
+
+    public  void printCorner2(Node node)
+    {
+        
+        // add your code here 
+        dfs(node,1);
+        
+        for(int i : mySortedMap.keySet()){
+            int size=mySortedMap.get(i).size();
+            if(size==1){
+                System.out.print(mySortedMap.get(i).get(0)+" ");
+            }
+            else{ 
+                 System.out.print(mySortedMap.get(i).get(0)+" "+mySortedMap.get(i).get(size-1)+" ");
+            }
+        }
+        
+
+    }
+    public void dfs(Node node,int level){
+        if(node==null) return;
+        List<Integer> lis;
+        if(mySortedMap.keySet().contains(level)){
+            lis=mySortedMap.get(level);
+        }
+        else{
+            lis=new ArrayList<>();
+        }
+        lis.add(node.data);
+        mySortedMap.put(level,lis);
+        
+        dfs(node.left,level+1);
+        dfs(node.right,level+1);
+    }
+    
+    public static void printCorner(Node node){
+        
+        Queue<Node> qq= new LinkedList<>();
+        
+        Node prev= new Node(-1);
+        
+        qq.add(node);
+        qq.add(null);
+        
+        while(qq.size()!=1){
+            
+            Node x= qq.poll();
+            
+            if(x==null){
+               System.out.print(qq.peek().data+" "); 
+               qq.add(null);
+               prev=qq.peek();
+               continue;
+            }
+            if(qq.peek()==null && x!=prev) System.out.print(x.data+" ");
+            
+            if(x.left!=null) qq.add(x.left);
+            if(x.right!=null) qq.add(x.right);
+        }
+    }
+}
