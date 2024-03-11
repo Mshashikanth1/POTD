@@ -26,12 +26,14 @@ class Solution {
     Time : O(n^2)
     Soace : O(1)
     */
-    int countPairs(int mat1[][], int mat2[][], int n, int x) {
+    int countPairs2(int mat1[][], int mat2[][], int n, int x) {
         Set<Integer> set=new HashSet<>();
         int c=0;
         for(int[] row :mat1){ 
             for(int i : row) set.add(i);
         }
+        
+       
         for(int[] row :mat2){ 
             for(int i : row){
                 if(set.contains(x-i)) { c++;}
@@ -39,6 +41,41 @@ class Solution {
         }
         return c;
         }
+       
+    /*
+    
+        hear instead of traversing every element in both matrix 
+        we can traverse one and do a binary search in other matrix that will be much faster then traversing 
+        and also we no need hashset for constant lookup that req. space 
+
+    Time : O(n^2)
+    Space : O(1)
+
+    */    
+   int countPairs(int mat1[][], int mat2[][], int n, int x) {
+        int c=0;
+        for(int[] row :mat1){ 
+            for(int i : row){
+                if(binarySearch(mat2,n,0,n*n-1,x-i)) c++;
+            }  
+        }
+        return c;
+   }
+   boolean binarySearch(int mat[][] ,int n, int l ,int r, int t){
+      
+       while(l<=r){
+            int m= l+(r-l)/2; //integer overflow for large numbers
+            int mCol=m%n;
+            int mRow =m/n;
+            
+            if(mat[mRow][mCol]==t) return true;
+            else if(mat[mRow][mCol] > t) r=m-1;
+            else l=m+1;
+       }
+       return false;
+       
+   }
+
 }
 
 /*
@@ -81,6 +118,7 @@ Constraints:
 1 ≤ mat1[i][j] , mat2[i][j] ≤ 105
 1 ≤ n ≤ 100
 1 ≤ x ≤ 105
+
 
 
 
